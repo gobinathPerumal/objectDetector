@@ -1,16 +1,59 @@
-# object_detector
+ObjectDetector(Flutter):
 
-A new Flutter project.
+Description:
+    1. Get image from stream using mobile camera.
+    2. After get the image, try to detect the object in the image using ML.
+    3. If image contain any object, it doesnot return any value.
 
-## Getting Started
+Used Plugins:
+    1. camera
+    2. tflite
+    3. splashscreen
 
-This project is a starting point for a Flutter application.
+Integration:
+    Note: ObjectDetector detect the object from the image with the help of TFlite plugin.
 
-A few resources to get you started if this is your first Flutter project:
+    1. Add camera and tflite in pubspec.yaml file
+    2. In this project I have added trained tflite and txt file in assets folder and included that files in pubspec.yaml also.
+    3. In home screen default opens back camera view and continuously stream the data from camera.
+    4. Using camera plugin we will get the stream of camera image data.
+    5. Once we receive image stream from camera, that image hs passed to tflite and try to detect the object which is placed in the image.
+    6. using runStreamData method to detect the object from image
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+    7. runStreamData() async {
+        if (cameraImage != null) {
+        var recognition = await Tflite.runModelOnFrame(
+           bytesList: cameraImage!.planes.map((plane) {
+             return plane.bytes;
+           }).toList(),
+           imageHeight: cameraImage!.height,
+           imageWidth: cameraImage!.width,
+           imageMean: 127.5,
+           imageStd: 127.5,
+           rotation: 90,
+           numResults: 2,
+           threshold: 0.1,
+           asynch: true);
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+        result = "";
+
+        recognition?.forEach((element) {
+         result += element["label"] +
+             "  " +
+             (element["confidence"] as double).toStringAsFixed(2) +
+             "\n";
+        });
+        setState(() {
+         result;
+        });
+        isWorking = false;
+     }
+   }
+
+  8. In the runStreamData method, used to convert normal image stream to bytes.
+  9. Using Tflite.runModelOnFrame, get object from the image with the help of trained data tflite file.
+  10. Finally we get the object name from the image, its shows in textview in the bottom of the screen.
+
+
+
+-------In Project folder I have attached the app screenshots, please refer that one...______________

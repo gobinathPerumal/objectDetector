@@ -36,7 +36,17 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             color: Colors.red,
           ),
-          Container(height:100,child: Text(result),)
+          Expanded(
+            child: Center(
+              child: Text(
+                result,
+                style: const TextStyle(
+                    color: Colors.purple,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -84,11 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         cameraController?.startImageStream((image) => {
               if (!isWorking)
-                {
-                  isWorking = true,
-                  cameraImage = image,
-                  runStreamData()
-                }
+                {isWorking = true, cameraImage = image, runStreamData()}
             });
       });
     });
